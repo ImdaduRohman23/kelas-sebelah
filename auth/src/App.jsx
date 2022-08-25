@@ -5,8 +5,25 @@ import { Routes, Route, Link } from "react-router-dom";
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoutes from './pages/HOC/ProtectedRoutes';
+import { useEffect } from 'react';
 
 function App() {
+
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    const checkIfLogin = () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setIsLogin(false);
+      } else {
+        setIsLogin(true);
+      }
+    };
+    checkIfLogin();
+  }, []);
+
+
   return (
     <div className="App">
       <Routes>
@@ -14,7 +31,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={
-          <ProtectedRoutes>
+          <ProtectedRoutes isLogin={isLogin}>
             <Dashboard /> {/* ini children */}
           </ProtectedRoutes>
           } />
