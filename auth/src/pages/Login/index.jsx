@@ -1,11 +1,15 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import {Form, Container, Button} from 'react-bootstrap';
-const Register = () => {
+import { useNavigate } from 'react-router-dom';
+
+
+const Login = () => {
 
     const [email, setEmail] = useState('');
     const [pw, setPw] = useState('');
-    const [res, setRes] = useState('');
+    const [log, setLog] = useState('');
+    const navigate = useNavigate();
 
     const handleEmail = (e) =>{
         setEmail(e.target.value)
@@ -15,24 +19,32 @@ const Register = () => {
         setPw(e.target.value)
     }
 
-    const handleRegister = (e) => {
-        // console.log(email, pw)
-
-
+    const handleLogin = (e) => {
+        console.log(email, pw)
         e.preventDefault();
         const payload = {
             email: email,
             password: pw,
         };
 
-        axios.post('https://reqres.in/api/register', payload)
-            .then((res) => setRes((res.data.token)))
+        axios.post('https://reqres.in/api/Login', payload)
+            .then((res) => {
+                setLog(res.data.token)
+                console.log(log)
+                localStorage.setItem('token', res.data.token)
+                console.log('from getitem: ', localStorage.getItem('token'))
+                navigate('/dashboard')
+                
+            })
             .catch(err => console.log(err))
     }
 
+    console.log(log)
+
+
     return (
         <div>
-            <h1>Register</h1>
+            <h1>Login</h1>
             <Container>
                 <Form style={{width: '500px'}}>
                     <Form.Group className="mb-3" controlId="formGroupEmail">
@@ -43,14 +55,15 @@ const Register = () => {
                         <Form.Label>Password</Form.Label>
                         <Form.Control onChange={(e) => handlePw(e)} type="password" placeholder="Password" />
                     </Form.Group>
-                    <Button onClick={handleRegister}>Register</Button>
+                    <Button onClick={handleLogin}>Login</Button>
                 </Form>
             </Container>
             {
-                !!res.length && (<h3>Anda berhasil registrasi</h3>) 
+                !! log.length && (<h3>Anda berhasil Login</h3>)
             }
+
         </div>
     )
 }
 
-export default Register
+export default Login
