@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoutes from './pages/HOC/ProtectedRoutes';
 import { useEffect } from 'react';
+import Cek from './pages/Cek';
+import Edit from './pages/Edit';
 
 function App() {
 
@@ -35,8 +37,7 @@ function App() {
             <Dashboard /> {/* ini children */}
           </ProtectedRoutes>
           } />
-
-
+        <Route path="/edit/:id" element={<Edit />} />
       </Routes>
     </div>
   )
